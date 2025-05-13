@@ -1,3 +1,7 @@
+$$
+    \newcommand{\mx}[1]{\mathbf{#1}}
+$$
+
 # Lecture 1
 ## Introduction
 ### Big Data
@@ -53,6 +57,7 @@ Consider Single-channel signals, Multi-channel signals, Images, Point cloud
 
 ## Review of Regression
 ### Linear Regression Models and Least Squares
+#### Regression
 A linear regression model assumes that the regression function
 $E(Y|X)$ is linear in the inputs $X_1, \ldots , X_p$.
 
@@ -62,6 +67,7 @@ $$
 f(X) = \beta_0 + \sum_{j=1}^p X_j\beta_j.
 $$
 
+#### Regression - Least Squares Estimate
 The most popular estimation technique is to use *least squares* to
 pick coefficients $\beta = (\beta_0, \beta_1, \ldots, \beta_p)^T$ to minimize
 the residual sum of squares
@@ -75,9 +81,9 @@ $$
 How do we minimize $RSS(\beta)$?
 $$
 \begin{align}
-    \text{RSS}(\beta) &= (y - \mathbf{X}\beta)^T(y-\mathbf{X}\beta) \\
+    \text{RSS}(\beta) &= (y - \mx{X}\beta)^T(y-\mx{X}\beta) \\
     \frac{\partial \text{RSS}}{\partial \beta} 
-        &= -2\mathbf{X}^T(y-\mathbf{X}\beta) \\
+        &= -2\mx{X}^T(y-\mx{X}\beta) \\
     \frac{\partial^2 \text{RSS}}{\partial \beta \partial \beta^T} &= 2X^T X
 \end{align}
 $$
@@ -85,8 +91,8 @@ Assuming that $X$ has full column rank, hence $X^TX$ is positive definite, we
 set the first derivative to zero.
 $$
 \begin{align}
-    \mathbf{X}^T(y-X\beta) = 0 \\
-    \hat{\beta} = (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{X}^Ty
+    \mx{X}^T(y-X\beta) = 0 \\
+    \hat{\beta} = (\mx{X}^T\mx{X})^{-1} \mx{X}^Ty
 \end{align}
 $$
 
@@ -95,8 +101,18 @@ that the observations of $y_i$ are uncorrelated and have constant variance
 $\sigma^2$, and that the $x_i$ are fixed (non-random). The variance-covariance
 matrix of the least squares paramter estimates is given by:
 $$
-    \text{Var}(\hat{\beta}) = (\mathbf{X}^T\mathbf{X})^{-1} \sigma^2
+    \text{Var}(\hat{\beta}) = (\mx{X}^T\mx{X})^{-1} \sigma^2
 $$
+
+### Geometric Interpretation
+The Projection Matrix (Hat matrix) 
+$$\hat{y} = \mx{X}(\mx{X}^T\mx{X})^{-1} \mx{X}^Ty = \mx{H}y$$
+orthogonally projects $y$ onto the hyperplane spanned by $\mx{X}.$
+
+The projection of $\hat{y}$ represents the vector of predictions by the 
+least square method.
+
+### Properties of OLS Estimators
 Typically on estimates the variance $\sigma^2$ by
 $$
     \hat{\sigma}^2 = \frac{1}{N-p-1}\sum_{i=1}^N (y_i - \hat{y}_i)^2.
@@ -115,3 +131,68 @@ $$
 $$
 where the error $\epsilon$ is a Gaussian random variable, 
 $\epsilon \sim N(0, \sigma^2)$
+Therefore,
+$$
+    \hat{\beta} \sim N(\beta, (\mx{X}^T\mx{X})^{-1}\sigma^2). 
+$$
+
+To test the hypothesis that a particular coefficient $\beta_j = 0$, we
+form the standardized coefficient or *Z-score*
+$$
+    z_j = \frac{\hat{\beta}_j}{\hat{\sigma} \sqrt{v_j}}
+$$
+
+### Feature Extraction Usiong Regression
+Consider a high dimensional signal, we can fit the polynomial regression
+$$
+    y = \beta_0 + \beta_{i} t + \beta_2 t^2 + \beta_3 + t^3
+$$
+and extract only the estimated $\hat{\beta}$.
+
+## Splines
+### Polynomial Vs. Nonlinear Regression
+$m$-th order polynomial regression
+$$
+    y = \beta_0 + \beta_1 x + \beta_2 x^2 + 
+        \beta_3 x^3 + \cdots + \beta_m x^m + \epsilon
+$$
+Nonlinear regression often requires domain knowledge or first principles for
+finding the underlying nonlinear function. Often, these are piecewise.
+
+### Disadvantages of Polynomial Regression
+- Remote part of the function is very sensitive to outliers
+- Less flexibility due to global functional structure, you are always trying
+to convert a curve to a polynomial
+To repair these, we seek to build local strcuture instead of global structure.
+
+### Splines
+A spline is a linear combination of piecewise polynomial functions under
+continuity construction. We partition the domain of $x$ into continuous intervals
+and fit polynomials in each interval separately. This provides flexibility and
+local fitting.
+
+Suppose $x \in [a, b]$. Partition the $x$ domain using the following 
+points (knots).
+$$
+    a < \xi_1 < \xi_2 < \cdots < \xi_K < b \quad\quad \xi_0 = a, \xi_{K=1} = b
+$$
+
+Fit a polynomial in each interval under the continuity conditions and 
+integrate them by
+$$
+    f(X) = \sum_{m=1}^K \beta_m h_m(X)
+$$
+
+### Estimation
+The least squares method can be used to estimate the coefficients
+$$
+    \mx{H} = [h_1(x)\ h_2(x)\ h_3(x)\ h_4(x)\ h_5(x)\ h_6(x)] 
+        \rightarrow \hat{\beta} = (\mx{H}^T\mx{H})^{-1}\mx{H}^Ty
+$$
+Linear smoother: 
+$\hat{y} = \mx{H}\hat{\beta} = \mx{H}(\mx{H}^T \mx{H})^{-1} \mx{H}^Ty = \mx{S}y$ 
+
+Degrees of Freedom: $df = \text{trace} \mx{S}$
+
+Truncated power basis functions are simple and algebraically appealing, 
+but not efficient for computation and ill-posed and numerically unstable.
