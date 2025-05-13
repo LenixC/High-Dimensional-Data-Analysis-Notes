@@ -75,8 +75,9 @@ $$
 How do we minimize $RSS(\beta)$?
 $$
 \begin{align}
-    \text{RSS}(\beta) &= (y - X\beta)^T(y-X\beta) \\
-    \frac{\partial \text{RSS}}{\partial \beta} &= -2X^T(y-X\beta) \\
+    \text{RSS}(\beta) &= (y - \mathbf{X}\beta)^T(y-\mathbf{X}\beta) \\
+    \frac{\partial \text{RSS}}{\partial \beta} 
+        &= -2\mathbf{X}^T(y-\mathbf{X}\beta) \\
     \frac{\partial^2 \text{RSS}}{\partial \beta \partial \beta^T} &= 2X^T X
 \end{align}
 $$
@@ -84,8 +85,8 @@ Assuming that $X$ has full column rank, hence $X^TX$ is positive definite, we
 set the first derivative to zero.
 $$
 \begin{align}
-    X^T(y-X\beta) = 0 \\
-    \hat{\beta} = (X^TX)^{-1} X^Ty
+    \mathbf{X}^T(y-X\beta) = 0 \\
+    \hat{\beta} = (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{X}^Ty
 \end{align}
 $$
 
@@ -94,6 +95,23 @@ that the observations of $y_i$ are uncorrelated and have constant variance
 $\sigma^2$, and that the $x_i$ are fixed (non-random). The variance-covariance
 matrix of the least squares paramter estimates is given by:
 $$
-    \text{Var}(\hat{\beta}) = (X^TX)^{-1} \sigma^2
+    \text{Var}(\hat{\beta}) = (\mathbf{X}^T\mathbf{X})^{-1} \sigma^2
 $$
-
+Typically on estimates the variance $\sigma^2$ by
+$$
+    \hat{\sigma}^2 = \frac{1}{N-p-1}\sum_{i=1}^N (y_i - \hat{y}_i)^2.
+$$
+The $N-p-1$ rather than $N$ in the denominator makes $\hat{\sigma}^2$ an 
+unbiased estimate.
+Assume that linear regression is the correct model for the mean;
+the conditional expection of $Y$ is linear in $X_1, \ldots, X_p$. We also
+Assume the deviations of $Y$ around its expectations are additive and
+Gaussian. Therefore:
+$$
+\begin{align}
+    Y &= \text{E}(Y|X_1, \ldots, X_p) + \epsilon \\
+    &= \beta_0 + \sum_{j=1}^pX_j \beta_j + \epsilon,
+\end{align}
+$$
+where the error $\epsilon$ is a Gaussian random variable, 
+$\epsilon \sim N(0, \sigma^2)$
