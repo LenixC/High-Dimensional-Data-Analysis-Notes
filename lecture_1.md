@@ -2,15 +2,15 @@
 ## Introduction
 ### Big Data
 The initial definition of Big Data revolves around the three R's:
-- Volume: Large sampel size, potentially high-dimensional. Use MapReduce,
+- Volume: Large sample size, potentially high-dimensional. Use MapReduce,
 Hadoop, etc. when data is too large to be stored in one machine.
 - Velocity: Data is generate dand collected very quickly. Increases computation
 efficiency.
 - Variety: The data types you mention all take different shapes. How to deal
-with high-dimensional data, e.g. profiles, images, videos, etc?
+with high-dimensional data, e.g. profiles, images, videos, etc.
 
 ### High Dimensional Data
-High dimensional data is defined as a data set with a large number od attributes.
+High dimensional data is defined as a data set with a large number of attributes.
 Consider Signals, Images, Videos, Surveys.
 
 ### High-Dimensional Data vs Big Data 
