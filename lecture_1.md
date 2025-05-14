@@ -59,41 +59,57 @@ $E(Y|X)$ is linear in the inputs $X_1, \ldots , X_p$.
 
 We have an input vector $X^T = (X_1, X_2, \ldots, X_p)$ and we want to predict
 a real-valued output $Y$. The Linear Regression model has the form:
-$$f(X) = \beta_0 + \sum_{j=1}^p X_j\beta_j.$$
+
+```math
+f(X) = \beta_0 + \sum_{j=1}^p X_j\beta_j.
+```
 
 #### Regression - Least Squares Estimate
 The most popular estimation technique is to use *least squares* to
 pick coefficients $\beta = (\beta_0, \beta_1, \ldots, \beta_p)^T$ to minimize
 the residual sum of squares
-$$\begin{align}
+
+```math
+\begin{align}
     \text{RSS}(\beta) &= \sum_{i=1}^N(y_i - f(x_i))^2 \\
     &= \sum_{i=1}^N\left( y_i - \beta_0 - \sum_{j=1}^p x_{ij}\beta_j \right)^2.
-\end{align}$$
+\end{align}
+```
 
 How do we minimize $RSS(\beta)$?
-$$\begin{align}
+
+```math
+\begin{align}
     \text{RSS}(\beta) &= (y - \mathbf{X}\beta)^T(y-\mathbf{X}\beta) \\
     \frac{\partial \text{RSS}}{\partial \beta} 
         &= -2\mathbf{X}^T(y-\mathbf{X}\beta) \\
     \frac{\partial^2 \text{RSS}}{\partial \beta \partial \beta^T} &= 2X^T X
-\end{align}$$
+\end{align}
+```
 
 Assuming that $X$ has full column rank, hence $X^TX$ is positive definite, we
 set the first derivative to zero.
-$$\begin{align}
+
+```math
+\begin{align}
     \mathbf{X}^T(y-X\beta) = 0 \\
     \hat{\beta} = (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{X}^Ty
-\end{align}$$
+\end{align}
+```
 
 In order to identify the sampling properties of $\hat{\beta}$, we assume
 that the observations of $y_i$ are uncorrelated and have constant variance
 $\sigma^2$, and that the $x_i$ are fixed (non-random). The variance-covariance
 matrix of the least squares paramter estimates is given by:
-$$\text{Var}(\hat{\beta}) = (\mathbf{X}^T\mathbf{X})^{-1} \sigma^2$$
+```math
+\text{Var}(\hat{\beta}) = (\mathbf{X}^T\mathbf{X})^{-1} \sigma^2
+```
 
 ### Geometric Interpretation
 The Projection Matrix (Hat matrix) 
-$$\hat{y} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1} \mathbf{X}^Ty = \mathbf{H}y$$
+```math
+\hat{y} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1} \mathbf{X}^Ty = \mathbf{H}y
+```
 orthogonally projects $y$ onto the hyperplane spanned by $\mathbf{X}.$
 
 The projection of $\hat{y}$ represents the vector of predictions by the 
@@ -101,7 +117,9 @@ least square method.
 
 ### Properties of OLS Estimators
 Typically on estimates the variance $\sigma^2$ by
-$$\hat{\sigma}^2 = \frac{1}{N-p-1}\sum_{i=1}^N (y_i - \hat{y}_i)^2.$$
+```math
+\hat{\sigma}^2 = \frac{1}{N-p-1}\sum_{i=1}^N (y_i - \hat{y}_i)^2.
+```
 
 The $N-p-1$ rather than $N$ in the denominator makes $\hat{\sigma}^2$ an 
 unbiased estimate.
@@ -109,30 +127,40 @@ Assume that linear regression is the correct model for the mean;
 the conditional expection of $Y$ is linear in $X_1, \ldots, X_p$. We also
 Assume the deviations of $Y$ around its expectations are additive and
 Gaussian. Therefore:
-$$\begin{align}
+```math
+\begin{align}
     Y &= \text{E}(Y|X_1, \ldots, X_p) + \epsilon \\
     &= \beta_0 + \sum_{j=1}^pX_j \beta_j + \epsilon,
-\end{align}$$
+\end{align}
+```
 
 where the error $\epsilon$ is a Gaussian random variable, 
 $\epsilon \sim N(0, \sigma^2)$
 Therefore,
-$$\hat{\beta} \sim N(\beta, (\mathbf{X}^T\mathbf{X})^{-1}\sigma^2).$$
+```math
+\hat{\beta} \sim N(\beta, (\mathbf{X}^T\mathbf{X})^{-1}\sigma^2).
+```
 
 To test the hypothesis that a particular coefficient $\beta_j = 0$, we
 form the standardized coefficient or *Z-score*
-$$z_j = \frac{\hat{\beta}_j}{\hat{\sigma} \sqrt{v_j}}$$
+```math
+z_j = \frac{\hat{\beta}_j}{\hat{\sigma} \sqrt{v_j}}
+```
 
 ### Feature Extraction Usiong Regression
 Consider a high dimensional signal, we can fit the polynomial regression
-$$y = \beta_0 + \beta_{i} t + \beta_2 t^2 + \beta_3 + t^3$$
+```math
+y = \beta_0 + \beta_{i} t + \beta_2 t^2 + \beta_3 + t^3
+```
 and extract only the estimated $\hat{\beta}$.
 
 ## Splines
 ### Polynomial Vs. Nonlinear Regression
 $m$-th order polynomial regression
-$$y = \beta_0 + \beta_1 x + \beta_2 x^2 + 
-        \beta_3 x^3 + \cdots + \beta_m x^m + \epsilon$$
+```math
+y = \beta_0 + \beta_1 x + \beta_2 x^2 + 
+        \beta_3 x^3 + \cdots + \beta_m x^m + \epsilon
+```
 Nonlinear regression often requires domain knowledge or first principles for
 finding the underlying nonlinear function. Often, these are piecewise.
 
@@ -150,16 +178,22 @@ local fitting.
 
 Suppose $x \in [a, b]$. Partition the $x$ domain using the following 
 points (knots).
-$$a < \xi_1 < \xi_2 < \cdots < \xi_K < b \quad\quad \xi_0 = a, \xi_{K=1} = b$$
+```math
+a < \xi_1 < \xi_2 < \cdots < \xi_K < b \quad\quad \xi_0 = a, \xi_{K=1} = b
+```
 
 Fit a polynomial in each interval under the continuity conditions and 
 integrate them by
-$$f(X) = \sum_{m=1}^K \beta_m h_m(X)$$
+```math
+f(X) = \sum_{m=1}^K \beta_m h_m(X)
+```
 
 ### Estimation
 The least squares method can be used to estimate the coefficients
-$$\mathbf{H} = [h_1(x)\ h_2(x)\ h_3(x)\ h_4(x)\ h_5(x)\ h_6(x)] 
-        \rightarrow \hat{\beta} = (\mathbf{H}^T\mathbf{H})^{-1}\mathbf{H}^Ty$$
+```math
+\mathbf{H} = [h_1(x)\ h_2(x)\ h_3(x)\ h_4(x)\ h_5(x)\ h_6(x)] 
+        \rightarrow \hat{\beta} = (\mathbf{H}^T\mathbf{H})^{-1}\mathbf{H}^Ty
+```
 Linear smoother: 
 $\hat{y} = \mathbf{H}\hat{\beta} = \mathbf{H}(\mathbf{H}^T \mathbf{H})^{-1} \mathbf{H}^Ty = \mathbf{S}y$ 
 
