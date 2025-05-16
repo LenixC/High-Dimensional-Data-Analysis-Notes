@@ -201,3 +201,51 @@ Degrees of Freedom: $df = \text{trace} \mathbf{S}$
 
 Truncated power basis functions are simple and algebraically appealing, 
 but not efficient for computation and ill-posed and numerically unstable.
+
+
+## B-splines and Smoother Matrix
+### B-splines
+Alternavitve basis vectors for piecewise polynomials that are more
+computationally efficient. 
+- Each basis function has local support, i.e., it is nonzero over at most
+$M$ (spline order) consecutive intervals
+- The basis matrix is banded
+
+
+### B-spline Basis
+Let $B_{j, m}$ be the $j$th B-spline basis function of order $m$ $(m \leq M)$
+for the knot sequence $\tau$
+```math
+    a < \xi_1 < \xi_2 < \cdots < \xi_K < b
+```
+Define the augmented knots sequence $\tau$
+
+$\tau_1 \leq \tau_2 \leq \cdots \leq \tau_M \leq \xi_0$
+
+$\tau_{M+j} = \xi_j, \quad j=1 \cdots K$
+
+$\xi_{K+1} \leq \tau_{M+K+1} \leq \tau_{M+K+2} \leq \cdots \tau+{2M+k}$
+
+Denote by $B_{i, m}(x)$ the $i$th B-spline basis function of order $m$ for the
+knot-sequence $\tau, m \leq M$. They are defined recursively in terms of
+divided differences as follows:
+```math
+  B_{i, 1}(x) =\begin{cases}
+			1, & \text{if $\tau_i \leq x < \tau_{i+1}$}\\
+            0, & \text{otherwise}
+		 \end{cases}  
+```
+for $i=1, \cdots, K + 2M - 1$. 
+```math
+    B_{i, m}(x) = \frac{x-\tau_i}{\tau_{i+m-1}-\tau_i}B_{i, m-1}(x) 
+        + \frac{\tau_{i+m}-x}{\tau_{i+m}-\tau_{i+1}}B_{i+1,m-1}(x) 
+```
+for $i=1, \ldots, K+2M-m$.
+
+## Smoother Matrix
+Consider a regression Spline basis $B$
+```math
+    \hat{f} = \mathbf{B}(\mathbf{B}^T\mathbf{B})^{-1}\mathbf{B}^Ty = \mathbf{H}y
+```
+$H$ is the smoother matrix, idemoptent, and symmetric.
+The degrees of freedom is given by $\text{trace}(H)$
